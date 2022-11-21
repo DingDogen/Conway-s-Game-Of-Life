@@ -14,11 +14,13 @@ namespace Conway_s_Game_Of_Life
     {
 
         private Graphics graphics;
-        private int resolution;
+        private int pxSize;
         private bool[,] field;
         private int rows;
         private int columns;
-        private int currentGeneration = 0;
+        private Color bgrColor = Color.Black;
+        private SolidBrush pxColor = new SolidBrush(Color.Crimson);
+        private bool isStarted = false;
 
         public Form1()
         {
@@ -27,51 +29,59 @@ namespace Conway_s_Game_Of_Life
         private void StartGame()
         {
             if (timer.Enabled) return;
+            if (!isStarted)
+            {
+                isStarted = true;
+                pxSize = (int)nud_Resolution.Value;
+                rows = pictureBox.Height / pxSize;
+                columns = pictureBox.Width / pxSize;
+                field = new bool[columns, rows];
 
-            currentGeneration = 0;
+                GenerateField();
+            }
+            timer.Start();
 
-            nud_Resolution.Enabled = false;
-            nud_Density.Enabled = false;
-            nud_NeighboursToBorn.Enabled = false;
-            nud_MinNeighboursForSurvival.Enabled = false;
-            nud_MaxNeighboursForSurvival.Enabled = false;
+        }
 
+        private void StopGame()
+        {
+            if (!timer.Enabled) return;
+            timer.Stop();
+        }
 
-            resolution = (int)nud_Resolution.Value;
-            rows = pictureBox.Height / resolution;
-            columns = pictureBox.Width / resolution;
+        private void RefreshGame()
+        {
+            if (!timer.Enabled) StartGame();
+            GenerateField();
+        }
+
+        private void GenerateField()
+        {
+            pxSize = (int)nud_Resolution.Value;
+            rows = pictureBox.Height / pxSize;
+            columns = pictureBox.Width / pxSize;
             field = new bool[columns, rows];
 
+            FillField();
+        }
+
+        private void FillField()
+        {
             Random random = new Random();
-            for (int x =0; x < columns; x++)
+            for (int x = 0; x < columns; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {
                     field[x, y] = random.Next((int)nud_Density.Value) == 0;
                 }
             }
-
             pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
             graphics = Graphics.FromImage(pictureBox.Image);
-
-            timer.Start();
-        }
-
-        private void StopGame()
-        {
-            if (!timer.Enabled) return;
-
-            timer.Stop();
-            nud_Resolution.Enabled = true;
-            nud_Density.Enabled = true;
-            nud_NeighboursToBorn.Enabled = true;
-            nud_MinNeighboursForSurvival.Enabled = true;
-            nud_MaxNeighboursForSurvival.Enabled = true;
         }
 
         private void NextGeneration()
         {
-            graphics.Clear(Color.Black);
+            graphics.Clear(bgrColor);
 
             bool[,] newField = new bool[columns, rows];
 
@@ -79,13 +89,13 @@ namespace Conway_s_Game_Of_Life
             {
                 for (int y = 0; y < rows; y++)
                 {
-                    int neighboursCount = CountNeighbours(x,y);
+                    int neighboursCount = CountNeighbours(x, y);
                     bool hasLife = field[x, y];
-                    if(!hasLife && neighboursCount == (int)nud_NeighboursToBorn.Value)
+                    if (!hasLife && neighboursCount == (int)nud_NeighboursToBorn.Value)
                     {
                         newField[x, y] = true;
                     }
-                    else if(hasLife &&(neighboursCount < (int)nud_MinNeighboursForSurvival.Value || neighboursCount > (int)nud_MaxNeighboursForSurvival.Value))
+                    else if (hasLife && (neighboursCount < (int)nud_MinNeighboursForSurvival.Value || neighboursCount > (int)nud_MaxNeighboursForSurvival.Value))
                     {
                         newField[x, y] = false;
                     }
@@ -94,9 +104,9 @@ namespace Conway_s_Game_Of_Life
                         newField[x, y] = field[x, y];
                     }
 
-                    if(hasLife)
+                    if (hasLife)
                     {
-                        graphics.FillRectangle(Brushes.Crimson, x * resolution, y * resolution, resolution, resolution);
+                        graphics.FillRectangle(pxColor, x * pxSize, y * pxSize, pxSize, pxSize);
                     }
                 }
             }
@@ -131,7 +141,6 @@ namespace Conway_s_Game_Of_Life
         private void timer_Tick(object sender, EventArgs e)
         {
             NextGeneration();
-            Text = $"Current generation {currentGeneration++}";
         }
 
         private void button_Start_Click(object sender, EventArgs e)
@@ -144,22 +153,43 @@ namespace Conway_s_Game_Of_Life
             StopGame();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button_Refresh_Click(object sender, EventArgs e)
         {
-            Text = $"Текущее поколение {currentGeneration}";
+            RefreshGame();
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (!timer.Enabled) return;
 
-            int x = e.Location.X / resolution;
-            int y = e.Location.Y / resolution;
+            int x = e.Location.X / pxSize;
+            int y = e.Location.Y / pxSize;
 
-            if (e.Button == MouseButtons.Left && IsOnField(x,y)) field[x,y] = true;       
-            if (e.Button == MouseButtons.Right && IsOnField(x, y)) field[x, y] = false;        
+            if (e.Button == MouseButtons.Left && IsOnField(x, y)) field[x, y] = true;
+            if (e.Button == MouseButtons.Right && IsOnField(x, y)) field[x, y] = false;
         }
 
         private bool IsOnField(int x, int y) => x >= 0 && y >= 0 && x <= columns && y <= rows;
-    }
+
+        private void nud_SPS_ValueChanged(object sender, EventArgs e)
+        {
+            timer.Interval = (int)(1000 / nud_SPS.Value);
+        }
+
+        private void button_bgrColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.FullOpen = true;
+            if (cd.ShowDialog() == DialogResult.Cancel) return;
+            bgrColor = cd.Color;
+        }
+
+        private void button_pxColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.FullOpen = true;
+            if (cd.ShowDialog() == DialogResult.Cancel) return;
+            pxColor = new SolidBrush(cd.Color);
+        }
+    }    
 }
