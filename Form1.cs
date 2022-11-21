@@ -160,13 +160,23 @@ namespace Conway_s_Game_Of_Life
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!timer.Enabled) return;
+            try
+            {
+                int x = e.Location.X / pxSize;
+                int y = e.Location.Y / pxSize;
+            }
+            catch (DivideByZeroException)
+            {
+                pxSize = (int)nud_Resolution.Value;
+            }
+            finally
+            {
+                int x = e.Location.X / pxSize;
+                int y = e.Location.Y / pxSize;
 
-            int x = e.Location.X / pxSize;
-            int y = e.Location.Y / pxSize;
-
-            if (e.Button == MouseButtons.Left && IsOnField(x, y)) field[x, y] = true;
-            if (e.Button == MouseButtons.Right && IsOnField(x, y)) field[x, y] = false;
+                if (e.Button == MouseButtons.Left && IsOnField(x, y)) field[x, y] = true;
+                if (e.Button == MouseButtons.Right && IsOnField(x, y)) field[x, y] = false;
+            }
         }
 
         private bool IsOnField(int x, int y) => x >= 0 && y >= 0 && x <= columns && y <= rows;
@@ -178,16 +188,21 @@ namespace Conway_s_Game_Of_Life
 
         private void button_bgrColor_Click(object sender, EventArgs e)
         {
-            ColorDialog cd = new ColorDialog();
-            cd.FullOpen = true;
+            ColorDialog cd = new ColorDialog
+            {
+                FullOpen = true
+            };
             if (cd.ShowDialog() == DialogResult.Cancel) return;
             bgrColor = cd.Color;
+
         }
 
         private void button_pxColor_Click(object sender, EventArgs e)
         {
-            ColorDialog cd = new ColorDialog();
-            cd.FullOpen = true;
+            ColorDialog cd = new ColorDialog
+            {
+                FullOpen = true
+            };
             if (cd.ShowDialog() == DialogResult.Cancel) return;
             pxColor = new SolidBrush(cd.Color);
         }
