@@ -21,6 +21,7 @@ namespace Conway_s_Game_Of_Life
         private Color bgrColor = Color.Black;
         private SolidBrush pxColor = new SolidBrush(Color.Crimson);
         private bool isStarted = false;
+        private bool isRandomTimerStarted = false;
 
         public Form1()
         {
@@ -205,6 +206,30 @@ namespace Conway_s_Game_Of_Life
             };
             if (cd.ShowDialog() == DialogResult.Cancel) return;
             pxColor = new SolidBrush(cd.Color);
+        }
+
+        private void button_RandomChange_Click(object sender, EventArgs e)
+        {
+            if (!timer.Enabled)
+            {
+                StartGame();
+            }
+            if(isRandomTimerStarted)
+            {
+                isRandomTimerStarted = false;
+                timer_random.Stop();
+                return;
+            }
+            timer_random.Start();
+            isRandomTimerStarted = true;
+        }
+
+        private void timer_random_Tick(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            nud_MaxNeighboursForSurvival.Value = random.Next((int)nud_MaxNeighboursForSurvival.Minimum, (int)nud_MaxNeighboursForSurvival.Maximum +1);
+            nud_MinNeighboursForSurvival.Value = random.Next((int)nud_MinNeighboursForSurvival.Minimum, (int)nud_MinNeighboursForSurvival.Maximum - 3);
+            nud_NeighboursToBorn.Value = random.Next((int)nud_NeighboursToBorn.Minimum, (int)nud_NeighboursToBorn.Maximum - 3);
         }
     }    
 }

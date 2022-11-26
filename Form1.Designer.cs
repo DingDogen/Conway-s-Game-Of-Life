@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button_pxColor = new System.Windows.Forms.Button();
+            this.button_bgrColor = new System.Windows.Forms.Button();
             this.nud_SPS = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -46,11 +48,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nud_Resolution = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.button_bgrColor = new System.Windows.Forms.Button();
-            this.button_pxColor = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.button_RandomСhange = new System.Windows.Forms.Button();
+            this.timer_random = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -100,6 +102,28 @@
             this.splitContainer1.SplitterDistance = 179;
             this.splitContainer1.TabIndex = 0;
             // 
+            // button_pxColor
+            // 
+            this.button_pxColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_pxColor.Location = new System.Drawing.Point(91, 405);
+            this.button_pxColor.Name = "button_pxColor";
+            this.button_pxColor.Size = new System.Drawing.Size(81, 48);
+            this.button_pxColor.TabIndex = 15;
+            this.button_pxColor.Text = "Pixels Color ";
+            this.button_pxColor.UseVisualStyleBackColor = true;
+            this.button_pxColor.Click += new System.EventHandler(this.button_pxColor_Click);
+            // 
+            // button_bgrColor
+            // 
+            this.button_bgrColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_bgrColor.Location = new System.Drawing.Point(7, 405);
+            this.button_bgrColor.Name = "button_bgrColor";
+            this.button_bgrColor.Size = new System.Drawing.Size(81, 48);
+            this.button_bgrColor.TabIndex = 7;
+            this.button_bgrColor.Text = "Back Color ";
+            this.button_bgrColor.UseVisualStyleBackColor = true;
+            this.button_bgrColor.Click += new System.EventHandler(this.button_bgrColor_Click);
+            // 
             // nud_SPS
             // 
             this.nud_SPS.Location = new System.Drawing.Point(7, 379);
@@ -135,13 +159,14 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button_RandomСhange);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.button_Stop);
             this.panel1.Controls.Add(this.button_Start);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 504);
+            this.panel1.Location = new System.Drawing.Point(0, 459);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(175, 116);
+            this.panel1.Size = new System.Drawing.Size(175, 161);
             this.panel1.TabIndex = 12;
             // 
             // button1
@@ -335,6 +360,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Pixels size";
             // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(175, 620);
+            this.panel2.TabIndex = 16;
+            // 
             // pictureBox
             // 
             this.pictureBox.BackColor = System.Drawing.Color.Black;
@@ -351,35 +384,21 @@
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // button_bgrColor
+            // button_RandomСhange
             // 
-            this.button_bgrColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_bgrColor.Location = new System.Drawing.Point(7, 405);
-            this.button_bgrColor.Name = "button_bgrColor";
-            this.button_bgrColor.Size = new System.Drawing.Size(81, 48);
-            this.button_bgrColor.TabIndex = 7;
-            this.button_bgrColor.Text = "Back Color ";
-            this.button_bgrColor.UseVisualStyleBackColor = true;
-            this.button_bgrColor.Click += new System.EventHandler(this.button_bgrColor_Click);
+            this.button_RandomСhange.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_RandomСhange.Location = new System.Drawing.Point(3, 120);
+            this.button_RandomСhange.Name = "button_RandomСhange";
+            this.button_RandomСhange.Size = new System.Drawing.Size(169, 33);
+            this.button_RandomСhange.TabIndex = 7;
+            this.button_RandomСhange.Text = "Random change";
+            this.button_RandomСhange.UseVisualStyleBackColor = true;
+            this.button_RandomСhange.Click += new System.EventHandler(this.button_RandomChange_Click);
             // 
-            // button_pxColor
+            // timer_random
             // 
-            this.button_pxColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_pxColor.Location = new System.Drawing.Point(91, 405);
-            this.button_pxColor.Name = "button_pxColor";
-            this.button_pxColor.Size = new System.Drawing.Size(81, 48);
-            this.button_pxColor.TabIndex = 15;
-            this.button_pxColor.Text = "Pixels Color ";
-            this.button_pxColor.UseVisualStyleBackColor = true;
-            this.button_pxColor.Click += new System.EventHandler(this.button_pxColor_Click);
-            // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(175, 620);
-            this.panel2.TabIndex = 16;
+            this.timer_random.Interval = 5000;
+            this.timer_random.Tick += new System.EventHandler(this.timer_random_Tick);
             // 
             // Form1
             // 
@@ -431,6 +450,8 @@
         private System.Windows.Forms.Button button_pxColor;
         private System.Windows.Forms.Button button_bgrColor;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button button_RandomСhange;
+        private System.Windows.Forms.Timer timer_random;
     }
 }
 
